@@ -1,4 +1,4 @@
-﻿namespace Lab_01
+﻿namespace Lab_01.Models
 {
     internal class User
     {

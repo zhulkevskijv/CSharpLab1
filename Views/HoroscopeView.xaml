@@ -18,14 +18,14 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <DatePicker Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="40"  RenderTransformOrigin="0.5,0.5" SelectedDate="{Binding Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></DatePicker>
+            <DatePicker Grid.ColumnSpan="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="40"  RenderTransformOrigin="0.5,0.5" Text="{Binding Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></DatePicker>
             <Label Grid.Row="1" Grid.Column="0" Content="Your age:" HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
             <Label Grid.Row="2" Grid.Column="0" Content="Your zodiac sign according to the western astrological system:"  HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
             <Label Grid.Row="3" Grid.Column="0" Content="Your zodiac sign according to the Chinese astrological system:"  HorizontalAlignment="Center" VerticalAlignment="Center"></Label>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Age, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"></TextBlock>
             <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding WestHoroscope, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"></TextBlock>
             <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding ChineseHoroscope, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"></TextBlock>
-            <Button Grid.Row="4" Grid.ColumnSpan="2" Content="Calculate Age" Command="{Binding SubmitDateCommand}"></Button>
+            <Button Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Content="Calculate Age" Command="{Binding SubmitDateCommand}"></Button>
 
         </Grid>
     </Grid>

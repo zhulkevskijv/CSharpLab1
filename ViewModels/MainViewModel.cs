@@ -1,12 +1,9 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using JetBrains.Annotations;
+﻿using System.Windows;
 using Lab_01.Tools;
 
 namespace Lab_01.ViewModels
 {
-    internal class MainViewModel : ILoaderOwner
+    internal class MainViewModel : BaseViewModel, ILoaderOwner
     {
         #region Fields
 
@@ -43,18 +40,5 @@ namespace Lab_01.ViewModels
         {
             LoaderManager.Instance.Initialize(this);
         }
-
-
-        #region INotifyPropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
     }
 }

@@ -1,28 +1,30 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using JetBrains.Annotations;
 using Lab_01.Tools;
 
-namespace Lab_01
+namespace Lab_01.ViewModels
 {
-    internal class HoroscopeViewModel:INotifyPropertyChanged
+    internal class HoroscopeViewModel : BaseViewModel
     {
         #region Fields
+
         private string _westHoroscope;
         private string _chineseHoroscope;
         private string _date;
-        private int _age;
+        private string _age;
 
         #region Commands
+
         private RelayCommand<object> _submitDateCommand;
+
         #endregion
+
         #endregion
 
         #region Properties
+
         public string WestHoroscope
         {
             get => _westHoroscope;
@@ -53,7 +55,7 @@ namespace Lab_01
             }
         }
 
-        public int Age
+        public string Age
         {
             get => _age;
             set
@@ -62,13 +64,16 @@ namespace Lab_01
                 OnPropertyChanged();
             }
         }
+
         public RelayCommand<object> SubmitDateCommand
         {
             get
             {
-                return _submitDateCommand ?? (_submitDateCommand = new RelayCommand<object>(CalculateDate,o=>CanExecuteCommand()));
+                return _submitDateCommand ??
+                       (_submitDateCommand = new RelayCommand<object>(CalculateDate, o => CanExecuteCommand()));
             }
         }
+
         #endregion
 
         public bool CanExecuteCommand()
@@ -81,11 +86,53 @@ namespace Lab_01
             LoaderManager.Instance.ShowLoader();
             await Task.Run(() => Thread.Sleep(2000));
             LoaderManager.Instance.HideLoader();
-            Age = (DateTime.Today - Convert.ToDateTime(Date)).Days / 365;
-            if (Age > 135)
-                MessageBox.Show("You're too old to be alive.");
+            int age = CalculateAge();
+            if (age > 135)
+            {
+                ShowErrorMessageBox("You're too old to be alive.");
+                return;
+            }
+
+            if (age < 0)
+            {
+                ShowErrorMessageBox("You aren't born yet");
+                return;
+            }
+            Age = age + "";
             ChineseHoroscope = CalculateChineseHoroscope();
             WestHoroscope = CalculateWestHoroscope();
+            if (Convert.ToDateTime(Date).Day == DateTime.Today.Day &&
+                Convert.ToDateTime(Date).Month == DateTime.Today.Month)
+                MessageBox.Show("Happy birthday! ;)");
+        }
+
+        #region AdditionalMethodsForCalculating
+        private void ShowErrorMessageBox(string message)
+        {
+            Age = "";
+            WestHoroscope = "";
+            ChineseHoroscope = "";
+            MessageBox.Show(message);
+        }
+        private int CalculateAge()
+        {
+            DateTime date = Convert.ToDateTime(Date);
+            DateTime currentDate = DateTime.Today;
+            int age = currentDate.Year - date.Year;
+            if (date.Month > currentDate.Month)
+                return age - 1;
+            if (date.Month == currentDate.Month)
+            {
+                if (date.Day > currentDate.Day)
+                    return age - 1;
+                if (date.Day < currentDate.Day)
+                    return age;
+                if (date.Day == currentDate.Day)
+
+                    return age;
+            }
+
+            return age;
         }
 
         private string CalculateWestHoroscope()
@@ -95,7 +142,7 @@ namespace Lab_01
                 return "Aries";
             if ((date.Day >= 21 && date.Month == 4) || (date.Day <= 22 && date.Month == 5))
                 return "Taurus";
-            if ((date.Day >= 22 && date.Month == 5)||(date.Day <= 21 && date.Month == 6))
+            if ((date.Day >= 22 && date.Month == 5) || (date.Day <= 21 && date.Month == 6))
                 return "Gemini";
             if ((date.Day >= 22 && date.Month == 6) || (date.Day <= 22 && date.Month == 7))
                 return "Cancer";
@@ -114,7 +161,6 @@ namespace Lab_01
             if ((date.Day >= 21 && date.Month == 1) || (date.Day <= 19 && date.Month == 2))
                 return "Aquarius";
             return "Pisces";
-
         }
 
         private string CalculateChineseHoroscope()
@@ -151,14 +197,8 @@ namespace Lab_01
             }
         }
 
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
         #endregion
+
     }
 }
